@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50621
 File Encoding         : 65001
 
-Date: 2015-12-29 00:54:36
+Date: 2015-12-30 01:00:30
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -65,7 +65,10 @@ DROP TABLE IF EXISTS `sys_roles_permissions`;
 CREATE TABLE `sys_roles_permissions` (
   `role_id` bigint(20) NOT NULL,
   `permission_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`role_id`,`permission_id`)
+  PRIMARY KEY (`role_id`,`permission_id`),
+  KEY `permission_id` (`permission_id`),
+  CONSTRAINT `sys_roles_permissions_ibfk_1` FOREIGN KEY (`role_id`) REFERENCES `sys_roles` (`id`),
+  CONSTRAINT `sys_roles_permissions_ibfk_2` FOREIGN KEY (`permission_id`) REFERENCES `sys_permissions` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -77,8 +80,8 @@ INSERT INTO `sys_roles_permissions` VALUES ('1', '3');
 INSERT INTO `sys_roles_permissions` VALUES ('2', '3');
 INSERT INTO `sys_roles_permissions` VALUES ('2', '4');
 INSERT INTO `sys_roles_permissions` VALUES ('2', '5');
+INSERT INTO `sys_roles_permissions` VALUES ('3', '5');
 INSERT INTO `sys_roles_permissions` VALUES ('3', '6');
-INSERT INTO `sys_roles_permissions` VALUES ('3', '7');
 
 -- ----------------------------
 -- Table structure for sys_users
@@ -106,7 +109,10 @@ DROP TABLE IF EXISTS `sys_users_roles`;
 CREATE TABLE `sys_users_roles` (
   `user_id` bigint(20) NOT NULL,
   `role_id` bigint(20) NOT NULL,
-  PRIMARY KEY (`user_id`,`role_id`)
+  PRIMARY KEY (`user_id`,`role_id`),
+  KEY `role_id` (`role_id`),
+  CONSTRAINT `sys_users_roles_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `sys_users` (`id`),
+  CONSTRAINT `sys_users_roles_ibfk_2` FOREIGN KEY (`role_id`) REFERENCES `sys_roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -114,5 +120,5 @@ CREATE TABLE `sys_users_roles` (
 -- ----------------------------
 INSERT INTO `sys_users_roles` VALUES ('1', '1');
 INSERT INTO `sys_users_roles` VALUES ('1', '3');
-INSERT INTO `sys_users_roles` VALUES ('1', '4');
 INSERT INTO `sys_users_roles` VALUES ('2', '3');
+INSERT INTO `sys_users_roles` VALUES ('1', '4');
