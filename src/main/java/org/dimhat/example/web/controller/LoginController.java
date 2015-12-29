@@ -48,7 +48,6 @@ public class LoginController {
             model.addAttribute("error", error);
             return login(model, user);
         } else {//登录成功
-            user.setId(123L);
             subject.getSession().setAttribute("user", user);
             return "success";
         }

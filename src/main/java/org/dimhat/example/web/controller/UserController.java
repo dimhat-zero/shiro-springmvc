@@ -1,5 +1,6 @@
 package org.dimhat.example.web.controller;
 
+import org.apache.shiro.authz.annotation.Logical;
 import org.apache.shiro.authz.annotation.RequiresPermissions;
 import org.apache.shiro.authz.annotation.RequiresRoles;
 import org.springframework.stereotype.Controller;
@@ -23,7 +24,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/add2")
-    @RequiresPermissions("user:add")
+    @RequiresPermissions(value={"user:add","user:delete"},logical=Logical.AND)
     public String do_add(Model model) {
         return "success";
     }

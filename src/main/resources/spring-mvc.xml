@@ -14,7 +14,7 @@
 	
     <!-- 开启controller注解支持 -->
     <context:component-scan base-package="org.dimhat.example.web.controller" />
-	
+	<mvc:annotation-driven />
 	<!-- 
     <mvc:annotation-driven>
 		<mvc:argument-resolvers>
@@ -42,7 +42,17 @@
     <!-- 控制器异常处理 -->
     <bean id="exceptionHandlerExceptionResolver" class="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver">
     </bean>
+	
+	<!-- 通用异常处理 -->
+    <bean class="org.dimhat.example.web.exception.DefaultExceptionHandler"/>
 
-<!--     <bean class="com.jianla.shiro.web.exception.DefaultExceptionHandler"/> -->
+	<!--   
+       开启Shiro的注解(如@RequiresRoles，@RequiresPermissions)，需借助SpringAOP扫描使用Shiro注解的类，  
+       并在必要时进行安全逻辑验证。必须在springmvc这里配置
+    -->  
+    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>  
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">  
+        <property name="securityManager" ref="securityManager"></property>  
+    </bean>  
 
 </beans>
