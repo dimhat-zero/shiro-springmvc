@@ -14,7 +14,7 @@ public interface UserService {
 
     User register(User user);
 
-    User login(User user);
+    User login(String username, String password);
 
     void changePassword(Long userId, String newPassword);
 
@@ -49,4 +49,5 @@ public interface UserService {
      * @return
      */
     Set<String> findPermissions(String username);
+
 }

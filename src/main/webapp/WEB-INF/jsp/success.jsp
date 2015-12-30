@@ -23,6 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
+  <a href="<%=basePath%>logout?ref=toolbar">退出登录</a>
   ${sessionScope.user.username } ${user.id }
     恭喜你${user.username }，操作成功！
   </body>

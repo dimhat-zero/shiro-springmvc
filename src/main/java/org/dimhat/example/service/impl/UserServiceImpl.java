@@ -4,6 +4,7 @@ import java.util.Set;
 
 import org.dimhat.example.dao.UserDao;
 import org.dimhat.example.entity.User;
+import org.dimhat.example.exception.MyException;
 import org.dimhat.example.service.PasswordHelper;
 import org.dimhat.example.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,12 +37,20 @@ public class UserServiceImpl implements UserService {
         return userDao.save(user);
     }
 
-    /** 
-     * @see org.dimhat.example.service.UserService#login(org.dimhat.example.entity.User)
-     */
+    
     @Override
-    public User login(User user) {
-        return null;
+    public User login(String username,String password){
+    	User user = userDao.findByUsername(username);
+    	if(user==null){
+    		throw new MyException("找不到用户");
+    	}
+    	String encryptPassword = user.getPassword();
+    	user.setPassword(password);
+    	passwordHelper.encryptPassword(user);
+    	if(encryptPassword.equals(user.getPassword())){
+    		return user;
+    	}
+    	throw new MyException("密码不匹配");
     }
 
     /** 

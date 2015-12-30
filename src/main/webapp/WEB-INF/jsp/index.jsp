@@ -3,13 +3,13 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-<%@taglib prefix="form" uri="http://www.springframework.org/tags/form" %>  
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
     <base href="<%=basePath%>">
     
-    <title>登录</title>
+    <title>My JSP 'success.jsp' starting page</title>
     
 	<meta http-equiv="pragma" content="no-cache">
 	<meta http-equiv="cache-control" content="no-cache">
@@ -23,21 +23,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  	
-  	<form:form name="login" commandName="user" method="POST" >  
-  		<div class="form-group">
-  			<form:label path="username">用户名：</form:label>
-  			<form:input path="username"/>
-  			<form:errors path="username" cssStyle="color:red"></form:errors>  
-  		</div>
-  		<div class="form-group">
-  			<form:label path="password">密码：</form:label>
-  			<form:password path="password"/>
-  			<form:errors path="password" cssStyle="color:red"></form:errors>  
-  		</div>
-  		<form:button>登陆</form:button>
-	</form:form> 
-	${error }
-	
+  <h2>欢迎来到首页 ${user.username }</h2>
+  <a href="<%=basePath%>public/info">公开页面</a>
+  <a href="<%=basePath%>user/update">修改个人信息</a>
+  <a href="<%=basePath%>admin/manage">管理员页面</a>
   </body>
 </html>
