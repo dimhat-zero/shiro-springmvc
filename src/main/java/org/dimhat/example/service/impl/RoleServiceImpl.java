@@ -1,5 +1,7 @@
 package org.dimhat.example.service.impl;
 
+import java.util.List;
+
 import org.dimhat.example.dao.RoleDao;
 import org.dimhat.example.entity.Role;
 import org.dimhat.example.service.RoleService;
@@ -58,6 +60,22 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public void uncorrelatePermissions(Long roleId, Long... permissionIds) {
         roleDao.uncorrelatePermissions(roleId, permissionIds);
+    }
+
+    /** 
+     * @see org.dimhat.example.service.RoleService#findAll()
+     */
+    @Override
+    public List<Role> findAll() {
+        return roleDao.findAll();
+    }
+
+    /** 
+     * @see org.dimhat.example.service.RoleService#findOne(java.lang.Long)
+     */
+    @Override
+    public Role findOne(Long id) {
+        return roleDao.findOne(id);
     }
 
 }

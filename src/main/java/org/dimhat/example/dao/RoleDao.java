@@ -1,5 +1,7 @@
 package org.dimhat.example.dao;
 
+import java.util.List;
+
 import org.dimhat.example.entity.Role;
 
 /**
@@ -29,4 +31,8 @@ public interface RoleDao {
      * @param permissionIds  
      */
     void uncorrelatePermissions(Long roleId, Long... permissionIds);
+
+    List<Role> findAll();
+
+    Role findOne(Long roleId);
 }

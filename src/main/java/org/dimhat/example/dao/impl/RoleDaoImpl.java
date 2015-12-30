@@ -3,10 +3,12 @@ package org.dimhat.example.dao.impl;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 
 import org.dimhat.example.dao.RoleDao;
 import org.dimhat.example.entity.Role;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -31,7 +33,7 @@ public class RoleDaoImpl implements RoleDao {
      */
     @Override
     public Role save(final Role role) {
-        final String sql = "insert into sys_roles(role,description,available) values(?,?,?)";
+        final String sql = "insert into sys_role(role,description,available) values(?,?,?)";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {
 
@@ -54,7 +56,7 @@ public class RoleDaoImpl implements RoleDao {
      */
     @Override
     public void update(Role role) {
-        String sql = "update sys_roles set role=?,description=?,available=? where id=?";
+        String sql = "update sys_role set role=?,description=?,available=? where id=?";
         jdbcTemplate.update(sql, role.getRole(), role.getDescription(), role.getAvailable(), role.getId());
     }
 
@@ -63,13 +65,13 @@ public class RoleDaoImpl implements RoleDao {
      */
     @Override
     public void delete(Long roleId) {
-        String sql = "delete from sys_roles where id = ?";
+        String sql = "delete from sys_role where id = ?";
         jdbcTemplate.update(sql, roleId);
     }
 
-    private boolean exist(Long roleId, Long permissionId) {
-        String sql = "select count(1) from sys_roles_permissions where role_id = ? and permission_id = ?";
-        int count = jdbcTemplate.queryForInt(sql, roleId, permissionId);
+    private boolean exist(Long roleId, Long resourceId) {
+        String sql = "select count(1) from sys_role_resource where role_id = ? and resource_id = ?";
+        int count = jdbcTemplate.queryForInt(sql, roleId, resourceId);
         return count != 0;
     }
 
@@ -77,14 +79,14 @@ public class RoleDaoImpl implements RoleDao {
      * @see org.dimhat.example.dao.RoleDao#correlatePermissions(java.lang.Long, java.lang.Long[])
      */
     @Override
-    public void correlatePermissions(Long roleId, Long... permissionIds) {
-        if (permissionIds == null || permissionIds.length == 0) {
+    public void correlatePermissions(Long roleId, Long... resourceIds) {
+        if (resourceIds == null || resourceIds.length == 0) {
             return;
         }
-        String sql = "insert into sys_roles_permissions(role_id,permission_id) values(?,?)";
-        for (Long permissionId : permissionIds) {
-            if (!exist(roleId, permissionId)) {
-                jdbcTemplate.update(sql, roleId, permissionId);
+        String sql = "insert into sys_role_resource(role_id,resource_id) values(?,?)";
+        for (Long resourceId : resourceIds) {
+            if (!exist(roleId, resourceId)) {
+                jdbcTemplate.update(sql, roleId, resourceId);
             }
         }
     }
@@ -93,16 +95,34 @@ public class RoleDaoImpl implements RoleDao {
      * @see org.dimhat.example.dao.RoleDao#uncorrelatePermissions(java.lang.Long, java.lang.Long[])
      */
     @Override
-    public void uncorrelatePermissions(Long roleId, Long... permissionIds) {
-        if (permissionIds == null || permissionIds.length == 0) {
+    public void uncorrelatePermissions(Long roleId, Long... resourceIds) {
+        if (resourceIds == null || resourceIds.length == 0) {
             return;
         }
-        String sql = "delete from sys_roles_permissions where role_id=? and permission_id=?";
-        for (Long permissionId : permissionIds) {
-            if (exist(roleId, permissionId)) {
-                jdbcTemplate.update(sql, roleId, permissionId);
+        String sql = "delete from sys_role_resource where role_id=? and resource_id=?";
+        for (Long resourceId : resourceIds) {
+            if (exist(roleId, resourceId)) {
+                jdbcTemplate.update(sql, roleId, resourceId);
             }
         }
+    }
+
+    /** 
+     * @see org.dimhat.example.dao.RoleDao#findAll()
+     */
+    @Override
+    public List<Role> findAll() {
+        String sql = "select * from sys_role";
+        return jdbcTemplate.query(sql, new BeanPropertyRowMapper<Role>());
+    }
+
+    /** 
+     * @see org.dimhat.example.dao.RoleDao#findOne(java.lang.Long)
+     */
+    @Override
+    public Role findOne(Long roleId) {
+        String sql = "select * from sys_role where id=?";
+        return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<Role>(), roleId);
     }
 
 }

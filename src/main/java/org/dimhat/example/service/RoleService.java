@@ -1,5 +1,7 @@
 package org.dimhat.example.service;
 
+import java.util.List;
+
 import org.dimhat.example.entity.Role;
 
 /**
@@ -29,4 +31,8 @@ public interface RoleService {
      * @param permissionIds
      */
     void uncorrelatePermissions(Long roleId, Long... permissionIds);
+
+    List<Role> findAll();
+
+    Role findOne(Long id);
 }

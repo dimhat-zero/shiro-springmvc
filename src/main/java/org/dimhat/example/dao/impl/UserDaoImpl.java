@@ -35,7 +35,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User save(final User user) {
-        final String sql = "insert into sys_users(username,password,locked) values(?,?,?)";
+        final String sql = "insert into sys_user(username,password,locked) values(?,?,?)";
         GeneratedKeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(new PreparedStatementCreator() {//使用预处理语句
 
@@ -58,7 +58,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void update(User user) {
-        String sql = "update sys_users set username=?,password=?,locked=?,last_login=? where id=?";
+        String sql = "update sys_user set username=?,password=?,locked=?,last_login=? where id=?";
         jdbcTemplate.update(sql, user.getUsername(), user.getPassword(), user.getLocked(), user.getLastLogin(),
             user.getId());
     }
@@ -68,7 +68,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public void delete(Long userId) {
-        String sql = "delete from sys_users where id=?";
+        String sql = "delete from sys_user where id=?";
         jdbcTemplate.update(sql, userId);
     }
 
@@ -79,7 +79,7 @@ public class UserDaoImpl implements UserDao {
      * @return 已拥有为true，未拥有为false
      */
     private boolean exist(Long userId, Long roleId) {
-        String sql = "select count(1) from sys_users_roles where user_id=? and role_id=?";
+        String sql = "select count(1) from sys_user_role where user_id=? and role_id=?";
         Integer count = jdbcTemplate.queryForObject(sql, Integer.class, userId, roleId);
         return count != 0;
     }
@@ -92,7 +92,7 @@ public class UserDaoImpl implements UserDao {
         if (roleIds == null || roleIds.length == 0) {
             return;
         }
-        String sql = "insert into sys_users_roles(user_id,role_id) values(?,?)";
+        String sql = "insert into sys_user_role(user_id,role_id) values(?,?)";
         for (Long roleId : roleIds) {
             if (!exist(userId, roleId)) {
                 jdbcTemplate.update(sql, userId, roleId);
@@ -108,7 +108,7 @@ public class UserDaoImpl implements UserDao {
         if (roleIds == null || roleIds.length == 0) {
             return;
         }
-        String sql = "delete from sys_users_roles where userId=? and role_id=?";
+        String sql = "delete from sys_user_role where userId=? and role_id=?";
         for (Long roleId : roleIds) {
             if (exist(userId, roleId)) {
                 jdbcTemplate.update(sql, userId, roleId);
@@ -121,7 +121,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User findOne(Long userId) {
-        String sql = "select * from sys_users where id = ?";
+        String sql = "select * from sys_user where id = ?";
         return jdbcTemplate.queryForObject(sql, User.class, userId);
         //return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), userId);
     }
@@ -131,7 +131,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public User findByUsername(String username) {
-        String sql = "select * from sys_users where username = ?";
+        String sql = "select * from sys_user where username = ?";
         return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), username);
     }
 
@@ -140,7 +140,7 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public Set<String> findRoles(String username) {
-        String sql = "select role from sys_users u,sys_roles r,sys_users_roles ur where u.username=? and u.id=ur.user_id and r.id=ur.role_id";
+        String sql = "select role from sys_user u,sys_role r,sys_user_role ur where u.username=? and u.id=ur.user_id and r.id=ur.role_id";
         List<String> roleList = jdbcTemplate.queryForList(sql, String.class, username);
         return new HashSet<>(roleList);
     }
@@ -150,8 +150,8 @@ public class UserDaoImpl implements UserDao {
      */
     @Override
     public Set<String> findPermissions(String username) {
-        String sql = "select permission from sys_users u,sys_roles r,sys_permissions p,sys_users_roles ur,sys_roles_permissions rp";
-        sql += "where u.username=? and u.id=ur.user_id and r.id=ur.role_id and r.id=rp.role_id and p.id=rp.permission_id";
+        String sql = "select permission from sys_user u,sys_role r,sys_resource p,sys_user_role ur,sys_role_resource rp";
+        sql += " where u.username=? and u.id=ur.user_id and r.id=ur.role_id and r.id=rp.role_id and p.id=rp.resource_id";
         List<String> permissionList = jdbcTemplate.queryForList(sql, String.class, username);
         return new HashSet<>(permissionList);
     }

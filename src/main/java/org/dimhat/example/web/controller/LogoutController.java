@@ -11,14 +11,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RequestMapping("/logout")
 public class LogoutController {
 
-	@RequestMapping(method=RequestMethod.GET)
-	public String doGet(HttpServletRequest request,String ref){
-		SecurityUtils.getSubject().logout();
-		if("toolbar".equals(ref)){
-			String referer = request.getHeader("referer");
-			System.out.println(referer+"退出成功");
-			return "redirect:"+referer;
-		}
-		return "redirect:";
-	}
+    @RequestMapping(method = RequestMethod.GET)
+    public String doGet(HttpServletRequest request, String ref) {
+        System.out.println("get logout");
+        SecurityUtils.getSubject().logout();
+        if ("toolbar".equals(ref)) {
+            String referer = request.getHeader("referer");
+            System.out.println(referer + "退出成功");
+            return "redirect:" + referer;
+        }
+        return "redirect:";
+    }
 }
