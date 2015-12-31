@@ -1,5 +1,6 @@
 package org.dimhat.example.service.impl;
 
+import java.util.List;
 import java.util.Set;
 
 import org.dimhat.example.dao.UserDao;
@@ -112,5 +113,29 @@ public class UserServiceImpl implements UserService {
     public Set<String> findPermissions(String username) {
         return userDao.findPermissions(username);
     }
+
+
+	@Override
+	public List<User> findAll() {
+		return userDao.findAll();
+	}
+
+
+	@Override
+	public User createUser(User user) {
+		return userDao.save(user);
+	}
+
+
+	@Override
+	public void updateUser(User user) {
+		userDao.update(user);
+	}
+
+
+	@Override
+	public void deleteUser(Long id) {
+		userDao.delete(id);
+	}
 
 }

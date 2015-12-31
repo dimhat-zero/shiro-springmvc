@@ -125,6 +125,12 @@ public class UserDaoImpl implements UserDao {
         return jdbcTemplate.queryForObject(sql, User.class, userId);
         //return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(User.class), userId);
     }
+    
+    @Override
+	public List<User> findAll() {
+		String sql="select * from sys_user";
+		return jdbcTemplate.query(sql, new BeanPropertyRowMapper(User.class));
+	}
 
     /** 
      * @see org.dimhat.example.dao.UserDao#findByUsername(java.lang.String)
@@ -155,5 +161,6 @@ public class UserDaoImpl implements UserDao {
         List<String> permissionList = jdbcTemplate.queryForList(sql, String.class, username);
         return new HashSet<>(permissionList);
     }
+
 
 }

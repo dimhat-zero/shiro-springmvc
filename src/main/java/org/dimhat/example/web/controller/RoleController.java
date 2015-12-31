@@ -25,7 +25,7 @@ public class RoleController {
     private RoleService       roleService;
 
     @Autowired
-    private ResourceService permissionService;
+    private ResourceService resourceService;
 
     @RequestMapping(method = RequestMethod.POST)
     public String showList(Model model) {
@@ -79,6 +79,6 @@ public class RoleController {
     }
 
     private void setCommonData(Model model) {
-        model.addAttribute("resourceList", permissionService.findAll());
+        model.addAttribute("resourceList", resourceService.findAll());
     }
 }

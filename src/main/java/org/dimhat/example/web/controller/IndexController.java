@@ -17,4 +17,5 @@ public class IndexController {
     	logger.info("get request[/] and user is "+user);
         return "index";
     }
+    
 }

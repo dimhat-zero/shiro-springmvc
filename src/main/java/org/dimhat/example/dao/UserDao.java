@@ -1,5 +1,6 @@
 package org.dimhat.example.dao;
 
+import java.util.List;
 import java.util.Set;
 
 import org.dimhat.example.entity.User;
@@ -39,4 +40,6 @@ public interface UserDao {
     Set<String> findRoles(String username);
 
     Set<String> findPermissions(String username);
+
+	List<User> findAll();
 }

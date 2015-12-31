@@ -1,5 +1,6 @@
 package org.dimhat.example.service;
 
+import java.util.List;
 import java.util.Set;
 
 import org.dimhat.example.entity.User;
@@ -49,5 +50,13 @@ public interface UserService {
      * @return
      */
     Set<String> findPermissions(String username);
+
+	List<User> findAll();
+
+	User createUser(User user);
+
+	void updateUser(User user);
+
+	void deleteUser(Long id);
 
 }
