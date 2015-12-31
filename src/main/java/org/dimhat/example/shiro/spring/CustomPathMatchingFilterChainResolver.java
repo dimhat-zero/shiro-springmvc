@@ -4,6 +4,7 @@ import javax.servlet.FilterChain;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.shiro.web.filter.mgt.FilterChainManager;
 import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
 
@@ -14,6 +15,8 @@ import org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver;
  * @version 1.0
  */
 public class CustomPathMatchingFilterChainResolver extends PathMatchingFilterChainResolver {
+	
+	private Logger logger=Logger.getLogger(CustomPathMatchingFilterChainResolver.class);
 
     private CustomDefaultFilterChainManager customDefaultFilterChainManager;
 
@@ -36,10 +39,10 @@ public class CustomPathMatchingFilterChainResolver extends PathMatchingFilterCha
         for (String pathPattern : filterChainManager.getChainNames()) {
 
             // If the path does match, then pass on to the subclass implementation for specific checks:
-            System.out.println("ready to match path pattern[" + pathPattern + "]");
+        	logger.info("ready to match path pattern[" + pathPattern + "]");
             if (pathMatches(pathPattern, requestURI)) {
-                System.out.println("Matched path pattern [" + pathPattern + "] for requestURI [" + requestURI + "].  "
-                                   + "Utilizing corresponding filter chain...");
+            	logger.info("[ok] Matched path pattern [" + pathPattern + "] for requestURI [" + requestURI + "].  "
+                        + "Utilizing corresponding filter chain...");
                 return customDefaultFilterChainManager.proxy(originalChain, pathPattern);
             }
         }

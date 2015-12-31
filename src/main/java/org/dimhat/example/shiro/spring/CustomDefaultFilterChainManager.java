@@ -122,6 +122,10 @@ public class CustomDefaultFilterChainManager extends DefaultFilterChainManager {
         //ignore
     }
 
+    /**
+     * 给过滤器设置登陆的跳转路径
+     * @param filter  
+     */
     private void applyLoginUrlIfNecessary(Filter filter) {
         String loginUrl = getLoginUrl();
         if (StringUtils.hasText(loginUrl) && (filter instanceof AccessControlFilter)) {
@@ -134,6 +138,10 @@ public class CustomDefaultFilterChainManager extends DefaultFilterChainManager {
         }
     }
 
+    /**
+     * 给过滤器设置成功后的跳转路径
+     * @param filter  
+     */
     private void applySuccessUrlIfNecessary(Filter filter) {
         String successUrl = getSuccessUrl();
         if (StringUtils.hasText(successUrl) && (filter instanceof AuthenticationFilter)) {
@@ -146,6 +154,10 @@ public class CustomDefaultFilterChainManager extends DefaultFilterChainManager {
         }
     }
 
+    /**
+     * 给过滤器设置未授权的跳转路径
+     * @param filter  
+     */
     private void applyUnauthorizedUrlIfNecessary(Filter filter) {
         String unauthorizedUrl = getUnauthorizedUrl();
         if (StringUtils.hasText(unauthorizedUrl) && (filter instanceof AuthorizationFilter)) {

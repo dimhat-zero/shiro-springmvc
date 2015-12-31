@@ -1,30 +1,38 @@
-<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
-<%
-String path = request.getContextPath();
-String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
-%>
-
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <html>
-  <head>
-    <base href="<%=basePath%>">
-    
-    <title>My JSP 'success.jsp' starting page</title>
-    
-	<meta http-equiv="pragma" content="no-cache">
-	<meta http-equiv="cache-control" content="no-cache">
-	<meta http-equiv="expires" content="0">    
-	<meta http-equiv="keywords" content="keyword1,keyword2,keyword3">
-	<meta http-equiv="description" content="This is my page">
-	<!--
-	<link rel="stylesheet" type="text/css" href="styles.css">
-	-->
+<body>
+    hello app1.<br/>
 
-  </head>
-  
-  <body>
-  <a href="<%=basePath%>logout?ref=toolbar">退出登录</a>
-  ${sessionScope.user.username } ${user.id }
-    恭喜你${user.username }，操作成功！
-  </body>
+    <shiro:guest>
+        <a href="${pageContext.request.contextPath}/login?backUrl=${pageContext.request.contextPath}">点击登录</a>
+    </shiro:guest>
+
+    <shiro:authenticated>
+        欢迎<shiro:principal/>登录<br/>
+        <shiro:hasRole name="role1">
+            您拥有role1角色<br/>
+        </shiro:hasRole>
+        <shiro:lacksRole name="role1">
+            您没有role1角色<br/>
+        </shiro:lacksRole>
+        <shiro:lacksRole name="role2">
+            您没有role2角色<br/>
+        </shiro:lacksRole>
+
+        <h2>设置会话属性</h2>
+        <form action="${pageContext.request.contextPath}/attr" method="post">
+            键：<input type="text" name="key">
+            值：<input type="text" name="value">
+            <input type="submit" value="设置会话属性">
+        </form>
+        <h2>获取会话属性</h2>
+        <form action="${pageContext.request.contextPath}/attr" method="get">
+            键：<input type="text" name="key">
+            值：<input type="text" value="${value}">
+            <input type="submit" value="获取会话属性">
+        </form>
+    </shiro:authenticated>
+
+</body>
 </html>

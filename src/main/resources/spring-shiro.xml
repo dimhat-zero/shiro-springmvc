@@ -41,14 +41,18 @@
         <property name="realm" ref="realm"></property>  
         <property name="cacheManager" ref="cacheManager"></property>  
     </bean>  
-  
-  	<!-- 自定义过滤器链管理器 -->
-  	<bean id="filterChainManager" class="org.dimhat.example.shiro.spring.CustomDefaultFilterChainManager ">
+    
+  	<bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">  
+        <!-- Shiro的核心安全接口，这个属性是必须的 -->  
+        <property name="securityManager" ref="securityManager"></property>  
+    </bean>  
+    
+    <!-- 自定义过滤器链管理器 -->
+    <bean id="filterChainManager" class="org.dimhat.example.shiro.spring.CustomDefaultFilterChainManager">
         <property name="loginUrl" value="/login"/>
         <property name="successUrl" value="/"/>
         <!-- 用户访问未对其授权的资源时，所显示的连接 -->  
-        <property name="unauthorizedUrl" value="/unauthorized.jsp"/>
-
+        <property name="unauthorizedUrl" value="/unauthorized"/>
         <property name="customFilters">
             <util:map>
 <!--                 <entry key="authc" value-ref="formAuthenticationFilter"/> -->
@@ -57,25 +61,23 @@
         </property>
         <property name="defaultFilterChainDefinitions">
             <value>
-            	/=anon
-            	/public/**=anon
+                /=anon
+                /public/**=anon
                 /login = authc
                 /logout = logout
-                /unauthorized.jsp = authc
+                /test/url2 = authc,perms["user:view"]
+                /admin/** = authc, roles[admin], perms["permission1"]
                 /** = authc
             </value>
         </property>
     </bean>
-    
-	<!--  -->
+     <!--
+    <bean id="filterChainResolver" class="org.apache.shiro.web.filter.mgt.PathMatchingFilterChainResolver">
+        <property name="filterChainManager" ref="filterChainManager"/>
+    </bean>
+      -->
     <bean id="filterChainResolver" class="org.dimhat.example.shiro.spring.CustomPathMatchingFilterChainResolver">
         <property name="customDefaultFilterChainManager" ref="filterChainManager"/>
-    </bean>
-     
-     
-    <!-- Shiro的Web过滤器 -->
-    <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        <property name="securityManager" ref="securityManager"/>
     </bean>
     
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

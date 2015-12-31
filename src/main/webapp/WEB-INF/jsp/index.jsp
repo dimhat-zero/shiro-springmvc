@@ -3,7 +3,7 @@
 String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
-
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
   <head>
@@ -23,7 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
   </head>
   
   <body>
-  <h2>欢迎来到首页 ${user.username }</h2>
+  <h2>欢迎来到首页 <shiro:principal/></h2>
   <a href="<%=basePath%>public/info">公开页面</a>
   <a href="<%=basePath%>user/update">修改个人信息</a>
   <a href="<%=basePath%>admin/manage">管理员页面</a>

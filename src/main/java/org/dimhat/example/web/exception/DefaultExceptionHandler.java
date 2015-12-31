@@ -24,14 +24,18 @@ public class DefaultExceptionHandler {
 	/**
 	 * 没有权限 异常
 	 * <p/>
+	 * nested exception is org.apache.shiro.authz.UnauthorizedException: Subject does not have permission [user:view]] with root cause
 	 * 后续根据不同的需求定制即可
 	 */
 	@ExceptionHandler({ UnauthorizedException.class })
-	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)//返回指定的http状态码
 	public ModelAndView processUnauthenticatedException(NativeWebRequest request, UnauthorizedException e) {
+		System.out.println("未授权异常，没有权限访问该资源");
 		ModelAndView mv = new ModelAndView();
+		
 		mv.addObject("exception", e);
 		mv.setViewName("unauthorized");
 		return mv;
 	}
+	
 }

@@ -59,13 +59,13 @@ public class UrlFilterDaoImpl implements UrlFilterDao {
 	@Override
 	public UrlFilter findOne(Long urlFilterId) {
 		String sql="select * from sys_url_filter where id=?";
-		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<UrlFilter>(),urlFilterId);
+		return jdbcTemplate.queryForObject(sql, new BeanPropertyRowMapper<>(UrlFilter.class),urlFilterId);
 	}
 
 	@Override
 	public List<UrlFilter> findAll() {
 		String sql="select * from sys_url_filter";
-		return jdbcTemplate.query(sql,new BeanPropertyRowMapper<UrlFilter>());
+		return jdbcTemplate.query(sql,new BeanPropertyRowMapper<>(UrlFilter.class));
 	}
 
 }
